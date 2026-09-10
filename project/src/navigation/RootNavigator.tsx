@@ -30,6 +30,14 @@ const navTheme = {
   },
 };
 
+function BotonAjustes({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable onPress={onPress} hitSlop={12}>
+      <Icon name="settings" size={22} color="#ffffff" />
+    </Pressable>
+  );
+}
+
 export function RootNavigator() {
   return (
     <NavigationContainer ref={navigationRef} theme={navTheme} onReady={consumirPedidoPendiente}>
@@ -39,11 +47,8 @@ export function RootNavigator() {
           component={TableroScreen}
           options={({ navigation }) => ({
             title: 'Requerimientos',
-            headerRight: () => (
-              <Pressable onPress={() => navigation.navigate('Ajustes')} hitSlop={12}>
-                <Icon name="settings" size={22} color="#ffffff" />
-              </Pressable>
-            ),
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: () => <BotonAjustes onPress={() => navigation.navigate('Ajustes')} />,
           })}
         />
         <Stack.Screen name="Detalle" component={DetalleScreen} options={{ title: 'Requerimiento' }} />

@@ -14,6 +14,10 @@ import { MensajeEstado } from '../components/MensajeEstado';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Tablero'>;
 
+function Separador() {
+  return <View style={styles.separador} />;
+}
+
 function coincide(p: Pedido, f: Filtros): boolean {
   if (f.estado && p.estado !== f.estado) return false;
   const q = f.texto.trim().toLowerCase();
@@ -100,7 +104,7 @@ export function TableroScreen({ navigation }: Props) {
             onPress={() => navigation.navigate('Detalle', { id: item.id })}
           />
         )}
-        ItemSeparatorComponent={() => <View style={styles.separador} />}
+        ItemSeparatorComponent={Separador}
         ListEmptyComponent={
           <MensajeEstado
             tipo="vacio"

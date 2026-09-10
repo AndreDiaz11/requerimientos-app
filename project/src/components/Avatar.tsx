@@ -6,7 +6,7 @@ const COLORES = ['#0073ea', '#00c875', '#a25ddc', '#fdab3d', '#e2445c', '#579bfc
 
 function colorPara(nombre: string): string {
   let h = 0;
-  for (let i = 0; i < nombre.length; i++) h = (h * 31 + nombre.charCodeAt(i)) & 0x7fffffff;
+  for (let i = 0; i < nombre.length; i++) h = (h * 31 + nombre.charCodeAt(i)) % 2147483647;
   return COLORES[h % COLORES.length];
 }
 
