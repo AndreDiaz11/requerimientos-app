@@ -5,6 +5,13 @@ export interface Novedad {
 
 export const NOVEDADES: Novedad[] = [
   {
+    version: '1.0.1',
+    cambios: [
+      'Nuevo icono de la app.',
+      'La app ahora aparece como "Z Requerimientos" para quedar al final de tu lista de apps.',
+    ],
+  },
+  {
     version: '1.0.0',
     cambios: [
       'Primera versión de la app.',

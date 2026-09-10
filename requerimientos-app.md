@@ -12,7 +12,7 @@ App Android (React Native) para el equipo de diseño de Tecsup. Muestra el mismo
 - **Notificación push**: al registrarse un requerimiento, el Worker manda un FCM a todos los dispositivos. Título "Nuevo requerimiento · <solicitante>", cuerpo con descripción + entrega. Tocarla abre el detalle de ese requerimiento (usa `data.url` = id).
 - **Actualización**: al abrir, la app consulta el último GitHub Release; si hay versión nueva, popup "Ahora no / Actualizar" que descarga el APK y lanza el instalador nativo. Tras actualizar, popup "Novedades" (una sola vez) con la lista de cambios en lenguaje simple.
 
-Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo `#f6f7fb`, mismas pills de estado y chips), con patrones nativos de Android (SectionList, RefreshControl, cabecera azul). Fechas en horario de Perú (UTC-5 fijo, sin DST). Solo español neutral.
+Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo `#f6f7fb`, mismas pills de estado y chips), con patrones nativos de Android (SectionList, RefreshControl, cabecera azul). Icono propio (portapapeles + check sobre azul de marca, mismo estilo que Z Fondo / Z Tempo). En el cajón de apps de Android aparece como **"Z Requerimientos"** (prefijo "Z" para que quede al final de la lista, convención del usuario). Fechas en horario de Perú (UTC-5 fijo, sin DST). Solo español neutral.
 
 ## Stack
 - **React Native 0.81.4** (TypeScript, New Architecture/Fabric, Hermes) — solo Android. Versiones idénticas a **Pulse** (Gradle 8.14.3, `compileSdk`/`targetSdk` 36, `minSdk` 24, `com.google.gms:google-services:4.4.4`) — stack ya probado en esta PC y en CI.
@@ -60,7 +60,8 @@ requerimientos-app/                 (repo: AndreDiaz11/requerimientos-app, priva
     │   ├── components/  EstadoPill · Chip · Avatar · FilaPedido · GrupoMes · FiltrosBar
     │   │                · MensajeEstado · UpdateDialog · NovedadesDialog
     │   └── hooks/usePedidos.ts     carga + refresco del listado
-    └── android/  (applicationId com.reqdiseno.app · google-services.json · versionName derivado de package.json)
+    └── android/  (applicationId com.reqdiseno.app · google-services.json · versionName derivado de package.json
+                   · strings.xml app_name = "Z Requerimientos" · mipmaps ic_launcher/ic_launcher_round propios)
 ```
 
 ## Archivos clave
@@ -95,7 +96,7 @@ Repo creado y con los 4 secrets cargados. Primer Release (`v1.0.0`) disparado po
 Ninguna en el cliente. El keystore de firma y su contraseña viven en `secretos/` (gitignored) y en GitHub Actions Secrets; copia cifrada en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z` (contraseña entregada al usuario una sola vez, no escrita en ningún archivo del repo). El envío del push (cuenta de servicio de Firebase) es un secret del **Worker web**, no de esta app — la app solo **recibe**.
 
 ## Estado
-Funcional: por verificar en dispositivo | Beta: sí (v1.0.0) | Última revisión: 2026-09-10 — creación del proyecto (Parte B de Requerimientos). Scaffold RN 0.81.4, package `com.reqdiseno.app`, 3 pantallas, push FCM con deep-link, auto-update + Novedades, repo + CI + keystore. `tsc --noEmit` pasa limpio. **Falta:** verificación visual en un dispositivo Android real (no hay SDK/emulador en la PC — mismo caso que Pulse, lo verifica el usuario).
+Funcional: sí (verificado en dispositivo real por el usuario) | Beta: sí (v1.0.1) | Última revisión: 2026-09-10 — v1.0.1: icono propio + nombre de lanzador "Z Requerimientos". Antes (v1.0.0): creación del proyecto (Parte B de Requerimientos), scaffold RN 0.81.4, 3 pantallas, push FCM con deep-link, auto-update + Novedades, repo + CI + keystore. `tsc --noEmit` limpio. Auto-actualización probada: la v1.0.0 instalada detecta y aplica sola las versiones nuevas.
 
 ## Integraciones externas
 - **API del Worker de `reqdiseno.com`** — `GET /api/pedidos`, `GET /api/pedidos/[id]`, `POST /api/fcm/registrar`, `POST /api/fcm/baja`, `GET /api/adjuntos/...`. Sin autenticación (la web tampoco tiene). No se escribe nada de la base desde la app.
@@ -116,10 +117,11 @@ Solo Android (`minSdk 24`, `targetSdk 36`). Edge-to-edge activado; los insets se
 No aplica — opera sobre los datos reales del tablero de `reqdiseno.com` (solo lectura).
 
 ## Versión
-1.0.0 — primera versión.
+1.0.1 — icono propio + nombre de lanzador "Z Requerimientos".
 
 ## Snapshots
 - Ninguno (proyecto nuevo).
 
 ## Cambios
+- 2026-09-10 — (v1.0.1) Icono propio (portapapeles + check sobre azul `#0073ea`, generado con `sharp` a partir del logo de la web, mismo estilo que Z Fondo / Z Tempo) en todas las densidades (`ic_launcher` + `ic_launcher_round`). `strings.xml` `app_name` → **"Z Requerimientos"** para que la app quede al final del cajón de apps. Entrada nueva en `NOVEDADES`. Sin cambios funcionales.
 - 2026-09-10 — (v1.0.0) **Creación del proyecto (Parte B de Requerimientos).** App Android React Native, solo lectura + push. Scaffold RN 0.81.4 con package `com.reqdiseno.app`; `lib` (config, constantes, tipos, formato, agrupar, novedades, theme) portado/adaptado de la web; `api/pedidos.ts`; servicios de push FCM (con deep-link al detalle desde los 3 orígenes), registro/baja del token, updateChecker y apkInstaller; `ajustesStore` (zustand + AsyncStorage); navegación stack de 3 pantallas (Tablero, Detalle, Ajustes); componentes visuales (EstadoPill, Chip, Avatar, FilaPedido, GrupoMes, FiltrosBar, MensajeEstado, UpdateDialog, NovedadesDialog). Android: plugin google-services, `google-services.json`, permisos POST_NOTIFICATIONS/REQUEST_INSTALL_PACKAGES, `versionName` derivado de `package.json`, firma de release por secrets. Workflows `release.yml` + `warm-cache.yml` (con cache de Gradle/npm). Repo privado `AndreDiaz11/requerimientos-app`, keystore nuevo generado (backup `.7z` en `#Documentations/Claude Code Backup/env-backups/`), 4 secrets cargados, tag `v1.0.0`. `tsc --noEmit` limpio.
