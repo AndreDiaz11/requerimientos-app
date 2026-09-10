@@ -26,9 +26,9 @@ Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo
 
 ## Estructura
 ```
-requerimientos-app/                 (repo: AndreDiaz11/requerimientos-app, PÚBLICO — ver Auto-actualización)
+✅ requerimientos-app/              (repo: AndreDiaz11/requerimientos-app, PÚBLICO — ver Auto-actualización)
 ├── requerimientos-app.apk          compilado más reciente (lo baja el usuario del Release; gitignored)
-├── requerimientos-app.md           esta doc (copia idéntica en #Documentations/)
+├── ✅ requerimientos-app (2026-09-10).md   esta doc (copia idéntica en #Documentations/)
 ├── .github/workflows/
 │   ├── release.yml                 tag v* → APK firmado → GitHub Release
 │   └── warm-cache.yml              precalienta cache de Gradle/npm en cada push a main
@@ -71,7 +71,7 @@ requerimientos-app/                 (repo: AndreDiaz11/requerimientos-app, PÚBL
 - `src/navigation/navigationRef.ts` — permite navegar al detalle desde el servicio de push aunque el `NavigationContainer` todavía no esté montado (guarda el id pendiente y lo consume en `onReady`).
 
 ## Instalar y correr
-Dentro de `project/` (requiere Android SDK + emulador/dispositivo, que **no** están en la PC actual — el build real es en CI):
+Dentro de `✅ requerimientos-app/project/` (requiere Android SDK + emulador/dispositivo, que **no** están en la PC actual — el build real es en CI):
 ```
 npm install
 npm run tsc          # chequeo de tipos (pasa limpio)
@@ -98,7 +98,8 @@ Repo **público** con los 4 secrets de firma cargados. Releases `v1.0.0` y `v1.0
 Ninguna en el cliente. El keystore de firma y su contraseña viven en `secretos/` (gitignored) y en GitHub Actions Secrets; copia cifrada en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z` (contraseña entregada al usuario una sola vez, no escrita en ningún archivo del repo). El envío del push (cuenta de servicio de Firebase) es un secret del **Worker web**, no de esta app — la app solo **recibe**.
 
 ## Estado
-Funcional: sí (verificado en dispositivo real por el usuario) | Beta: sí (v1.0.1) | Última revisión: 2026-09-10 — v1.0.1: icono propio + nombre de lanzador "Z Requerimientos". Antes (v1.0.0): creación del proyecto (Parte B de Requerimientos), scaffold RN 0.81.4, 3 pantallas, push FCM con deep-link, auto-update + Novedades, repo + CI + keystore. `tsc --noEmit` limpio. Auto-actualización probada: la v1.0.0 instalada detecta y aplica sola las versiones nuevas.
+**PROYECTO CERRADO AL 100% (2026-09-10).** Funcional: sí | En producción: sí (APK directo al equipo) | Verificado en dispositivo real por el usuario, incluida la **auto-actualización** (v1.0.0 → v1.0.1 llegó sola tras hacer el repo público). Sin pendientes.
+`main` lleva, sobre la v1.0.1 publicada, una limpieza de cierre solo de lint (sin cambios de comportamiento); el próximo build la incluirá. `tsc --noEmit` y `eslint` limpios.
 
 ## Integraciones externas
 - **API del Worker de `reqdiseno.com`** — `GET /api/pedidos`, `GET /api/pedidos/[id]`, `POST /api/fcm/registrar`, `POST /api/fcm/baja`, `GET /api/adjuntos/...`. Sin autenticación (la web tampoco tiene). No se escribe nada de la base desde la app.
@@ -122,9 +123,13 @@ No aplica — opera sobre los datos reales del tablero de `reqdiseno.com` (solo 
 1.0.1 — icono propio + nombre de lanzador "Z Requerimientos".
 
 ## Snapshots
-- Ninguno (proyecto nuevo).
+- Ninguno (proyecto nuevo, cerrado en su primera semana).
+
+## Cómo retomar
+Carpeta: `E:\DESCARGAS\PROYECTOS VS\✅ requerimientos-app`. Para tocar código: `cd project && npm install && npm run tsc`. Para publicar una versión: subir `version` en `project/package.json`, `npm install --package-lock-only`, agregar la entrada a `src/lib/novedades.ts`, commit + `git tag vX.Y.Z` + `git push origin main --tags` → CI compila el APK firmado y lo publica en Releases; los celulares con la app se actualizan solos al abrirla. El keystore vive en `secretos/` (gitignored) y en GitHub Secrets; backup en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z`. No hay dev server que matar (build solo en CI).
 
 ## Cambios
+- 2026-09-10 — **Proyecto cerrado al 100%.** Verificado en dispositivo (app + auto-actualización). Limpieza de cierre en `main`: `eslint` sin warnings (import sin usar en `GrupoMes`, hash sin bitwise en `Avatar`, separador de lista y botón de header hoisteados), quitado `project/.bundle` (config de CocoaPods, solo iOS). Carpeta renombrada a `✅ requerimientos-app`, doc con fecha en el nombre.
 - 2026-09-10 — **Repo cambiado a PÚBLICO.** La auto-actualización no funcionaba con el repo privado (la API de Releases y la descarga del APK dan 404 sin token). Ahora `api.github.com/.../releases/latest` y el `browser_download_url` responden 200 sin auth → la v1.0.0 instalada ya ve la v1.0.1. Excepción justificada a la regla 20, igual que Pulse/Fondo. Verificado que el repo no expone nada sensible.
 - 2026-09-10 — (v1.0.1) Icono propio (portapapeles + check sobre azul `#0073ea`, generado con `sharp` a partir del logo de la web, mismo estilo que Z Fondo / Z Tempo) en todas las densidades (`ic_launcher` + `ic_launcher_round`). `strings.xml` `app_name` → **"Z Requerimientos"** para que la app quede al final del cajón de apps. Entrada nueva en `NOVEDADES`. Sin cambios funcionales.
 - 2026-09-10 — (v1.0.0) **Creación del proyecto (Parte B de Requerimientos).** App Android React Native, solo lectura + push. Scaffold RN 0.81.4 con package `com.reqdiseno.app`; `lib` (config, constantes, tipos, formato, agrupar, novedades, theme) portado/adaptado de la web; `api/pedidos.ts`; servicios de push FCM (con deep-link al detalle desde los 3 orígenes), registro/baja del token, updateChecker y apkInstaller; `ajustesStore` (zustand + AsyncStorage); navegación stack de 3 pantallas (Tablero, Detalle, Ajustes); componentes visuales (EstadoPill, Chip, Avatar, FilaPedido, GrupoMes, FiltrosBar, MensajeEstado, UpdateDialog, NovedadesDialog). Android: plugin google-services, `google-services.json`, permisos POST_NOTIFICATIONS/REQUEST_INSTALL_PACKAGES, `versionName` derivado de `package.json`, firma de release por secrets. Workflows `release.yml` + `warm-cache.yml` (con cache de Gradle/npm). Repo `AndreDiaz11/requerimientos-app` (creado privado, luego cambiado a público — ver cambio del mismo día), keystore nuevo generado (backup `.7z` en `#Documentations/Claude Code Backup/env-backups/`), 4 secrets cargados, tag `v1.0.0`. `tsc --noEmit` limpio.
