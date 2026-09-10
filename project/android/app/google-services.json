@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "636761589844",
+    "project_id": "requerimientos-d1a62",
+    "storage_bucket": "requerimientos-d1a62.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636761589844:android:c411b482708ef33f9d45c1",
+        "android_client_info": {
+          "package_name": "com.reqdiseno.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBub205GaWggfsetIrKBKi-ah817IM6qoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

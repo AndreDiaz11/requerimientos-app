@@ -1,0 +1,54 @@
+name: Precalentar cache de release
+
+# Los caches de GitHub Actions quedan aislados por rama/tag: un run
+# disparado por un tag (v*) solo puede leer, como fallback, el cache de la
+# rama por defecto (main). Como release.yml solo corre en tags, sin este
+# workflow el cache de Gradle/npm nunca se reutilizaría entre releases.
+# Este corre en cada push a main (mismo commit que después se etiqueta) y
+# deja el cache listo bajo el scope de main.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**/*.md"
+      - ".gitignore"
+  workflow_dispatch:
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: project/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('project/android/**/*.gradle*', 'project/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - run: npm ci
+
+      - name: Resolver dependencias de Gradle
+        working-directory: project/android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:compileReleaseKotlin :app:generateReleaseBuildConfig
