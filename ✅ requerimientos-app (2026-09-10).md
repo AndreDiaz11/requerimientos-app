@@ -1,6 +1,8 @@
 # requerimientos-app
 
-> **Proyecto hermano de la web `Requerimientos`** (`E:\DESCARGAS\PROYECTOS VS\✅ Requerimientos`, repo `AndreDiaz11/pedidos-panel`, dominio `reqdiseno.com`). Comparten **solo el backend**: esta app es un cliente de la API del Worker. No tiene base de datos propia.
+> **Proyecto hermano de la web `Requerimientos`** (`E:\DESCARGAS\PROYECTOS VS\✅ Requerimientos\web`, repo `AndreDiaz11/pedidos-panel`, dominio `reqdiseno.com`). Comparten **solo el backend**: esta app es un cliente de la API del Worker. No tiene base de datos propia.
+>
+> **Carpeta local:** desde el 2026-09-11 vive en `E:\DESCARGAS\PROYECTOS VS\✅ Requerimientos\app` — se unificó con la web hermana bajo una sola carpeta padre `✅ Requerimientos` (antes eran dos carpetas top-level separadas que se veían duplicadas). Solo reorganización local del disco; el repo, el remoto (`AndreDiaz11/requerimientos-app`) y las Releases no cambiaron.
 
 ## Qué es
 App Android (React Native) para el equipo de diseño de Tecsup. Muestra el mismo tablero de requerimientos que `reqdiseno.com`, en el celular, y **avisa por notificación push** cuando alguien registra un requerimiento nuevo. Es **solo lectura**: ver el tablero y el detalle. Registrar, editar y cambiar estado se siguen haciendo en la web.
@@ -92,14 +94,14 @@ Sí, vía GitHub Releases — repo `AndreDiaz11/requerimientos-app`. `updateChec
 Sí — popup tipo WhatsApp una sola vez tras cada actualización (`NovedadesDialog`, `src/lib/novedades.ts`). La app se comparte con el equipo de diseño. El texto de cada versión se agrega a `NOVEDADES` en `novedades.ts` (redactado para el usuario final, no el técnico).
 
 ## Despliegue
-Repo **público** con los 4 secrets de firma cargados. Releases `v1.0.0` y `v1.0.1` publicados por tag. Distribución: **APK directo** entre el equipo de diseño (no Play Store por ahora — pendiente de decidir en una etapa de despliegue futura); de la v1.0.0 en adelante las actualizaciones llegan solas por el chequeo de Releases. El backend (Worker de `reqdiseno.com`) ya está en producción con las rutas `/api/fcm/{registrar,baja}` y el envío FCM verificado.
+Repo **público** con los 4 secrets de firma cargados. Releases `v1.0.0`, `v1.0.1` y `v1.0.2` publicados por tag. Distribución: **APK directo** entre el equipo de diseño (no Play Store por ahora — pendiente de decidir en una etapa de despliegue futura); de la v1.0.0 en adelante las actualizaciones llegan solas por el chequeo de Releases. El backend (Worker de `reqdiseno.com`) ya está en producción con las rutas `/api/fcm/{registrar,baja}` y el envío FCM verificado.
 
 ## Claves secretas
 Ninguna en el cliente. El keystore de firma y su contraseña viven en `secretos/` (gitignored) y en GitHub Actions Secrets; copia cifrada en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z` (contraseña entregada al usuario una sola vez, no escrita en ningún archivo del repo). El envío del push (cuenta de servicio de Firebase) es un secret del **Worker web**, no de esta app — la app solo **recibe**.
 
 ## Estado
 **PROYECTO CERRADO AL 100% (2026-09-10).** Funcional: sí | En producción: sí (APK directo al equipo) | Verificado en dispositivo real por el usuario, incluida la **auto-actualización** (v1.0.0 → v1.0.1 llegó sola tras hacer el repo público). Sin pendientes.
-`main` lleva, sobre la v1.0.1 publicada, una limpieza de cierre solo de lint (sin cambios de comportamiento); el próximo build la incluirá. `tsc --noEmit` y `eslint` limpios.
+`v1.0.2` publicada y verificada (2026-09-11): ícono recoloreado a `#003AC1`. `tsc --noEmit` y `eslint` limpios.
 
 ## Integraciones externas
 - **API del Worker de `reqdiseno.com`** — `GET /api/pedidos`, `GET /api/pedidos/[id]`, `POST /api/fcm/registrar`, `POST /api/fcm/baja`, `GET /api/adjuntos/...`. Sin autenticación (la web tampoco tiene). No se escribe nada de la base desde la app.
@@ -120,15 +122,17 @@ Solo Android (`minSdk 24`, `targetSdk 36`). Edge-to-edge activado; los insets se
 No aplica — opera sobre los datos reales del tablero de `reqdiseno.com` (solo lectura).
 
 ## Versión
-1.0.1 — icono propio + nombre de lanzador "Z Requerimientos".
+1.0.2 — ícono recoloreado a `#003AC1` para combinar con Fondo/Tempo/VaultSync.
 
 ## Snapshots
 - Ninguno (proyecto nuevo, cerrado en su primera semana).
 
 ## Cómo retomar
-Carpeta: `E:\DESCARGAS\PROYECTOS VS\✅ requerimientos-app`. Para tocar código: `cd project && npm install && npm run tsc`. Para publicar una versión: subir `version` en `project/package.json`, `npm install --package-lock-only`, agregar la entrada a `src/lib/novedades.ts`, commit + `git tag vX.Y.Z` + `git push origin main --tags` → CI compila el APK firmado y lo publica en Releases; los celulares con la app se actualizan solos al abrirla. El keystore vive en `secretos/` (gitignored) y en GitHub Secrets; backup en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z`. No hay dev server que matar (build solo en CI).
+Carpeta: `E:\DESCARGAS\PROYECTOS VS\✅ Requerimientos\app`. Para tocar código: `cd project && npm install && npm run tsc`. Para publicar una versión: subir `version` en `project/package.json`, `npm install --package-lock-only`, agregar la entrada a `src/lib/novedades.ts`, commit + `git tag vX.Y.Z` + `git push origin main --tags` → CI compila el APK firmado y lo publica en Releases; los celulares con la app se actualizan solos al abrirla. El keystore vive en `secretos/` (gitignored) y en GitHub Secrets; backup en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z`. No hay dev server que matar (build solo en CI).
 
 ## Cambios
+- 2026-09-11 — **Carpeta unificada.** Esta carpeta y la de la web hermana (`✅ Requerimientos`) eran dos carpetas top-level separadas y se veían como duplicadas; se movieron bajo `✅ Requerimientos\` con subcarpetas `web\` y `app\` (esta). Solo mueve de carpeta local — repo, remoto y Releases sin cambios.
+- 2026-09-11 — **(v1.0.2) Ícono recoloreado.** Fondo del ícono de `#0073ea` (celeste del panel web) a `#003AC1` (el azul de marca que ya usan Fondo/Tempo/VaultSync), en las 5 densidades y variantes normal/round. Recolor directo sobre los PNG existentes (interpolación entre azul viejo y blanco), sin regenerar desde el logo. Entrada nueva en `NOVEDADES`. Tag `v1.0.2` publicado, Release con APK firmado, verificado que el workflow terminó en éxito. Sin cambios funcionales.
 - 2026-09-10 — **Proyecto cerrado al 100%.** Verificado en dispositivo (app + auto-actualización). Limpieza de cierre en `main`: `eslint` sin warnings (import sin usar en `GrupoMes`, hash sin bitwise en `Avatar`, separador de lista y botón de header hoisteados), quitado `project/.bundle` (config de CocoaPods, solo iOS). Carpeta renombrada a `✅ requerimientos-app`, doc con fecha en el nombre.
 - 2026-09-10 — **Repo cambiado a PÚBLICO.** La auto-actualización no funcionaba con el repo privado (la API de Releases y la descarga del APK dan 404 sin token). Ahora `api.github.com/.../releases/latest` y el `browser_download_url` responden 200 sin auth → la v1.0.0 instalada ya ve la v1.0.1. Excepción justificada a la regla 20, igual que Pulse/Fondo. Verificado que el repo no expone nada sensible.
 - 2026-09-10 — (v1.0.1) Icono propio (portapapeles + check sobre azul `#0073ea`, generado con `sharp` a partir del logo de la web, mismo estilo que Z Fondo / Z Tempo) en todas las densidades (`ic_launcher` + `ic_launcher_round`). `strings.xml` `app_name` → **"Z Requerimientos"** para que la app quede al final del cajón de apps. Entrada nueva en `NOVEDADES`. Sin cambios funcionales.
