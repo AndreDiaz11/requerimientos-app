@@ -5,6 +5,12 @@ export interface Novedad {
 
 export const NOVEDADES: Novedad[] = [
   {
+    version: '1.0.2',
+    cambios: [
+      'Ajustado el color del icono para que combine con las demás apps.',
+    ],
+  },
+  {
     version: '1.0.1',
     cambios: [
       'Nuevo icono de la app.',
