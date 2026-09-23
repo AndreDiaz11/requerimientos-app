@@ -42,7 +42,7 @@ Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo
     ├── src/
     │   ├── lib/
     │   │   ├── config.ts           API_BASE=https://reqdiseno.com · GITHUB_REPO · CANAL_NOTIFICACIONES
-    │   │   ├── constantes.ts       ESTADOS + colores · UNIDADES_NEGOCIO · TIPOS · SOLICITANTES (copiados de la web)
+    │   │   ├── constantes.ts       ESTADOS + colores (copiados de la web)
     │   │   ├── tipos.ts            interface Pedido
     │   │   ├── formato.ts          fechas en Perú (offset fijo -5h) · urgencia · relativo · meses · iniciales
     │   │   ├── agrupar.ts          agrupa pedidos por mes de registro (misma lógica que la web)
@@ -110,7 +110,8 @@ Ninguna en el cliente. El keystore de firma y su contraseña viven en `secretos/
 
 ## Escalabilidad
 - Nueva pantalla: `src/screens/`, registrarla en `RootNavigator.tsx` (+ en `RootStackParams` de `navigationRef.ts`).
-- Nueva opción de unidad/tipo/solicitante o nuevo estado: reflejar el cambio de la web en `src/lib/constantes.ts` (deben coincidir con `reqdiseno.com`).
+- Nueva opción de unidad/tipo/solicitante: no requiere nada aquí — la app solo muestra el texto guardado en cada pedido (esas listas se editan en el `/admin` de la web y la app no las usa).
+- Nuevo estado: reflejar el cambio de la web en `src/lib/constantes.ts` (deben coincidir con `reqdiseno.com`).
 - Nuevo campo del requerimiento: agregarlo a `interface Pedido` (`tipos.ts`) + mostrarlo en `DetalleScreen.tsx` y/o `FilaPedido.tsx`.
 - Texto de "Novedades" de una versión: entrada nueva en `NOVEDADES` (`novedades.ts`).
 - Si la app pasara a escribir (registrar/editar): agregar funciones a `src/api/pedidos.ts` contra `POST/PUT/PATCH /api/pedidos[/id]` y pantallas de formulario.
@@ -131,6 +132,7 @@ No aplica — opera sobre los datos reales del tablero de `reqdiseno.com` (solo 
 Carpeta: `E:\DESCARGAS\PROYECTOS VS\✅ Requerimientos\app`. Para tocar código: `cd project && npm install && npm run tsc`. Para publicar una versión: subir `version` en `project/package.json`, `npm install --package-lock-only`, agregar la entrada a `src/lib/novedades.ts`, commit + `git tag vX.Y.Z` + `git push origin main --tags` → CI compila el APK firmado y lo publica en Releases; los celulares con la app se actualizan solos al abrirla. El keystore vive en `secretos/` (gitignored) y en GitHub Secrets; backup en `#Documentations/Claude Code Backup/env-backups/requerimientos-app.7z`. No hay dev server que matar (build solo en CI).
 
 ## Cambios
+- 2026-09-23 — **Auditoría de cierre.** Eliminado código muerto: `UNIDADES_NEGOCIO`/`TIPOS`/`SOLICITANTES` (sin uso y ya obsoletos, esas listas ahora se editan en el `/admin` de la web), `recortar` (`formato.ts`) y `R` (`theme.ts`). `tsc --noEmit` y `eslint` limpios. Sin cambio funcional ni versión nueva (no requiere release; los cambios entran en el próximo build).
 - 2026-09-23 — **Backup cifrado regenerado.** La contraseña del `.7z` anterior en `env-backups/` se perdió (auditoría general de contraseñas de backups); se generó una contraseña nueva al azar y se volvió a comprimir `secretos/` (keystore + su contraseña + `google-services.json`) con ella. Sin cambios de código ni de claves del keystore en sí — solo se rotó la contraseña de acceso al backup.
 - 2026-09-11 — **Carpeta unificada.** Esta carpeta y la de la web hermana (`✅ Requerimientos`) eran dos carpetas top-level separadas y se veían como duplicadas; se movieron bajo `✅ Requerimientos\` con subcarpetas `web\` y `app\` (esta). Solo mueve de carpeta local — repo, remoto y Releases sin cambios.
 - 2026-09-11 — **(v1.0.2) Ícono recoloreado.** Fondo del ícono de `#0073ea` (celeste del panel web) a `#003AC1` (el azul de marca que ya usan Fondo/Tempo/VaultSync), en las 5 densidades y variantes normal/round. Recolor directo sobre los PNG existentes (interpolación entre azul viejo y blanco), sin regenerar desde el logo. Entrada nueva en `NOVEDADES`. Tag `v1.0.2` publicado, Release con APK firmado, verificado que el workflow terminó en éxito. Sin cambios funcionales.

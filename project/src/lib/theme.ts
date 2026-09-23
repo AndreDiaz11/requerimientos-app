@@ -14,5 +14,3 @@ export const T = {
   peligro: '#d83a52',
   ok: '#00c875',
 };
-
-export const R = { sm: 8, md: 12, lg: 16 };

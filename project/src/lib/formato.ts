@@ -80,11 +80,6 @@ export const COLOR_URGENCIA: Record<Urgencia, string> = {
   vencido: '#c9304a',
 };
 
-export function recortar(texto: string, max = 80): string {
-  const limpio = texto.replace(/\s+/g, ' ').trim();
-  return limpio.length > max ? `${limpio.slice(0, max).trimEnd()}…` : limpio;
-}
-
 export function iniciales(nombre: string): string {
   const partes = nombre.trim().split(/\s+/);
   const a = partes[0]?.[0] ?? '';
