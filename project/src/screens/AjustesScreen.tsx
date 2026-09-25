@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { T } from '../lib/theme';
 import { API_BASE } from '../lib/config';
 import { useAjustesStore } from '../store/ajustesStore';
+import { useSesionStore } from '../store/sesionStore';
+import { cerrarSesionCompleta } from '../services/sesion';
 import { pedirPermisoNotificaciones, sincronizarRegistro } from '../services/pushNotifications';
 import { buscarActualizacion } from '../services/updateChecker';
 import { descargarEInstalarApk } from '../services/apkInstaller';
@@ -13,6 +15,8 @@ import paquete from '../../package.json';
 export function AjustesScreen() {
   const pushHabilitado = useAjustesStore(s => s.pushHabilitado);
   const setPushHabilitado = useAjustesStore(s => s.setPushHabilitado);
+  const persona = useSesionStore(s => s.persona);
+  const correo = useSesionStore(s => s.correo);
   const [ocupado, setOcupado] = useState(false);
   const [buscando, setBuscando] = useState(false);
   const insets = useSafeAreaInsets();
@@ -37,6 +41,17 @@ export function AjustesScreen() {
     } finally {
       setOcupado(false);
     }
+  }
+
+  function pedirCierreSesion() {
+    Alert.alert(
+      'Cerrar sesión',
+      'Dejarás de recibir los avisos de esta cuenta en este teléfono. ¿Continuar?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Cerrar sesión', style: 'destructive', onPress: () => cerrarSesionCompleta() },
+      ],
+    );
   }
 
   async function revisarActualizacion() {
@@ -72,6 +87,15 @@ export function AjustesScreen() {
     <ScrollView
       style={styles.contenedor}
       contentContainerStyle={[styles.contenido, { paddingBottom: insets.bottom + 32 }]}>
+      <View style={styles.tarjeta}>
+        <Text style={styles.titulo}>Sesión iniciada como {persona?.nombre ?? ''}</Text>
+        <Text style={styles.sub}>{correo ?? ''}</Text>
+        <TouchableOpacity style={styles.filaAccion} onPress={pedirCierreSesion}>
+          <Icon name="logout" size={20} color={T.peligro} />
+          <Text style={[styles.accionTexto, { color: T.peligro }]}>Cerrar sesión</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.tarjeta}>
         <View style={styles.filaSwitch}>
           <View style={styles.filaTexto}>

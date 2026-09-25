@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pressable } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,6 +8,8 @@ import { navigationRef, consumirPedidoPendiente, RootStackParams } from './navig
 import { TableroScreen } from '../screens/TableroScreen';
 import { DetalleScreen } from '../screens/DetalleScreen';
 import { AjustesScreen } from '../screens/AjustesScreen';
+import { LoginScreen } from '../screens/LoginScreen';
+import { useSesionStore } from '../store/sesionStore';
 
 const Stack = createNativeStackNavigator<RootStackParams>();
 
@@ -39,20 +41,43 @@ function BotonAjustes({ onPress }: { onPress: () => void }) {
 }
 
 export function RootNavigator() {
+  const cargada = useSesionStore(s => s.cargada);
+  const token = useSesionStore(s => s.token);
+  const persona = useSesionStore(s => s.persona);
+
+  // Si se tocó un aviso push antes de ingresar, se abre al terminar el ingreso.
+  useEffect(() => {
+    if (!token) return;
+    const t = setTimeout(consumirPedidoPendiente, 150);
+    return () => clearTimeout(t);
+  }, [token]);
+
+  if (!cargada) return null;
+
   return (
     <NavigationContainer ref={navigationRef} theme={navTheme} onReady={consumirPedidoPendiente}>
       <Stack.Navigator screenOptions={headerOptions}>
-        <Stack.Screen
-          name="Tablero"
-          component={TableroScreen}
-          options={({ navigation }) => ({
-            title: 'Requerimientos',
-            // eslint-disable-next-line react/no-unstable-nested-components
-            headerRight: () => <BotonAjustes onPress={() => navigation.navigate('Ajustes')} />,
-          })}
-        />
-        <Stack.Screen name="Detalle" component={DetalleScreen} options={{ title: 'Requerimiento' }} />
-        <Stack.Screen name="Ajustes" component={AjustesScreen} options={{ title: 'Ajustes' }} />
+        {token ? (
+          <>
+            <Stack.Screen
+              name="Tablero"
+              component={TableroScreen}
+              options={({ navigation }) => ({
+                title: persona ? `Requerimientos · ${persona.nombre}` : 'Requerimientos',
+                // eslint-disable-next-line react/no-unstable-nested-components
+                headerRight: () => <BotonAjustes onPress={() => navigation.navigate('Ajustes')} />,
+              })}
+            />
+            <Stack.Screen
+              name="Detalle"
+              component={DetalleScreen}
+              options={{ title: 'Requerimiento' }}
+            />
+            <Stack.Screen name="Ajustes" component={AjustesScreen} options={{ title: 'Ajustes' }} />
+          </>
+        ) : (
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

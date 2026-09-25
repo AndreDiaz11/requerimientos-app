@@ -5,6 +5,15 @@ export interface Novedad {
 
 export const NOVEDADES: Novedad[] = [
   {
+    version: '1.1.0',
+    cambios: [
+      'Ahora ingresas con tu correo: te llega un código de 6 dígitos que vence en 15 minutos.',
+      'Solo ves los requerimientos asignados a ti.',
+      'Los avisos push llegan únicamente cuando el requerimiento es para ti.',
+      'Puedes cerrar sesión desde Ajustes.',
+    ],
+  },
+  {
     version: '1.0.2',
     cambios: [
       'Ajustado el color del icono para que combine con las demás apps.',

@@ -8,6 +8,7 @@ export interface Pedido {
   comentario: string | null;
   tipo: string;
   solicitadoPor: string;
+  asignadoA: string | null;
   fechaEntrega: string;
   estado: EstadoId;
   referencia: string | null;
