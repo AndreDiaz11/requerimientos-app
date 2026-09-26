@@ -29,9 +29,9 @@ Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo
 
 ## Estructura
 ```
-✅ requerimientos-app/              (repo: AndreDiaz11/requerimientos-app, PÚBLICO — ver Auto-actualización)
+✅ Requerimientos/app/             (repo: AndreDiaz11/requerimientos-app, PÚBLICO — ver Auto-actualización)
 ├── requerimientos-app.apk          compilado más reciente (lo baja el usuario del Release; gitignored)
-├── ✅ requerimientos-app (2026-09-10).md   esta doc (copia idéntica en #Documentations/)
+├── ✅ requerimientos-app (2026-09-26).md   esta doc (copia idéntica en #Documentations/)
 ├── .github/workflows/
 │   ├── release.yml                 tag v* → APK firmado → GitHub Release
 │   └── warm-cache.yml              precalienta cache de Gradle/npm en cada push a main
@@ -76,7 +76,7 @@ Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo
 - `src/navigation/navigationRef.ts` — permite navegar al detalle desde el servicio de push aunque el `NavigationContainer` todavía no esté montado (guarda el id pendiente y lo consume en `onReady`).
 
 ## Instalar y correr
-Dentro de `✅ requerimientos-app/project/` (requiere Android SDK + emulador/dispositivo, que **no** están en la PC actual — el build real es en CI):
+Dentro de `✅ Requerimientosppproject` (requiere Android SDK + emulador/dispositivo, que **no** están en la PC actual — el build real es en CI):
 ```
 npm install
 npm run tsc          # chequeo de tipos (pasa limpio)
