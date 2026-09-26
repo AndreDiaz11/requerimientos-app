@@ -76,7 +76,7 @@ Diseño: adaptación móvil del lenguaje visual de la web (azul `#0073ea`, fondo
 - `src/navigation/navigationRef.ts` — permite navegar al detalle desde el servicio de push aunque el `NavigationContainer` todavía no esté montado (guarda el id pendiente y lo consume en `onReady`).
 
 ## Instalar y correr
-Dentro de `✅ Requerimientosppproject` (requiere Android SDK + emulador/dispositivo, que **no** están en la PC actual — el build real es en CI):
+Dentro de `✅ Requerimientos/app/project/` (requiere Android SDK + emulador/dispositivo, que **no** están en la PC actual — el build real es en CI):
 ```
 npm install
 npm run tsc          # chequeo de tipos (pasa limpio)
